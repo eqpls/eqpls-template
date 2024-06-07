@@ -9,7 +9,7 @@ Equal Plus
 #===============================================================================
 from fastapi import FastAPI, Request
 from common import setEnvironment, getConfig, Logger
-from service.views import View
+from service.tasks import Task
 
 
 #===============================================================================
@@ -18,15 +18,15 @@ from service.views import View
 setEnvironment('CONFIG', getConfig('server.conf'))
 Logger.register(CONFIG)
 app = FastAPI(title=CONFIG['default']['title'])
-view = View()
+task = Task()
 
 
 @app.on_event('startup')
-async def runStartUp(): await view.startup()
+async def runStartUp(): await task.startup()
 
 
 @app.on_event('shutdown')
-async def runShutDown(): await view.shutdown()
+async def runShutDown(): await task.shutdown()
 
 
 #===============================================================================
@@ -35,4 +35,4 @@ async def runShutDown(): await view.shutdown()
 @app.get('/test', tags=['Test'])
 async def get_test(request:Request) -> dict:
     query = request.query_params._dict
-    return await view.get_test(**query)
+    return await task.get_test(**query)
