@@ -1,0 +1,5 @@
+FROM python:3.12.3-alpine
+RUN pip install --no-cache-dir fastapi uvicorn websockets asyncio aiohttp aiofiles aiopath python-multipart stringcase requests
+RUN mkdir -p /opt/server
+WORKDIR /opt/server
+ENTRYPOINT ["python", "-u", "server.py"]
