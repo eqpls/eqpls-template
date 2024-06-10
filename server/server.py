@@ -10,7 +10,7 @@ import configparser
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
-    config.read('server.conf', encoding='utf-8')
+    config.read('../module.conf', encoding='utf-8')
     paths = [path.strip() for path in config['default']['paths'].split(',')]
     for path in paths: sys.path.append(path)
     paths.append('.')
