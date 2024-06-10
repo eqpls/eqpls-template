@@ -17,7 +17,7 @@ from schema.sample import Message, Status
 #===============================================================================
 # SingleTone
 #===============================================================================
-setEnvironment('CONFIG', getConfig('server.conf'))
+setEnvironment('CONFIG', getConfig('../module.conf'))
 Logger.register(CONFIG)
 app = FastAPI(title=CONFIG['default']['title'])
 task = Task()
