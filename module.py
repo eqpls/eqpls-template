@@ -27,6 +27,7 @@ client = docker.from_env()
 # default configs
 tenant = config['default']['tenant']
 version = config['default']['version']
+hostname = config['default']['hostname']
 host = config['default']['host']
 port = config['default']['port']
 system_access_key = config['default']['system_access_key']
@@ -56,6 +57,7 @@ def deploy():
         f'{tenant}/{module}:{version}',
         detach=True,
         name=module,
+        hostname=hostname,
         network=tenant,
         ports={
             f'{port}/tcp': (host, int(port))

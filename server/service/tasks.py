@@ -19,8 +19,6 @@ from common import EpException, asleep, runBackground
 #===============================================================================
 class Task:
 
-    BACKGROUND = True
-
     def __init__(self):
         self.messageMap = {}
 
