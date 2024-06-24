@@ -163,6 +163,9 @@ cython_debug/
 /.project
 /.pydevproject
 /.settings
+/.dbeaver
+/Scripts
 /conf.d
 /data.d
-/test.py
+/back.d
+test.py
