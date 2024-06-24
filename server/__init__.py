@@ -16,7 +16,7 @@ import configparser
 # Implement
 #===============================================================================
 def run():
-    os.chdir(os.path.dirname(__file__))
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
     config = configparser.ConfigParser()
     config.read('../module.conf', encoding='utf-8')
     stage = config['service']['stage']

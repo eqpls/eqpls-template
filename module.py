@@ -56,12 +56,13 @@ def deploy(nowait=False):
 # Configuration Here
         ''')
 
-    client.containers.run(
+    container = client.containers.run(
         f'{tenant}/{title}:{version}',
         detach=True,
         name=title,
         hostname=hostname,
         network=tenant,
+        mem_limit='1g',
         ports={
             f'{port}/tcp': (host, int(port))
         },
@@ -89,7 +90,6 @@ def deploy(nowait=False):
             exit(1)
         if 'Health' in container.attrs['State'] and container.attrs['State']['Health']['Status'] == 'healthy':
             print('container is healthy')
-            container.exec_run(f'/usr/share/elasticsearch/bin/elasticsearch-users useradd {system_access_key} -p {system_secret_key} -r superuser -s')
             break
 
 
