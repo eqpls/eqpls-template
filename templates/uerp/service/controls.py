@@ -28,7 +28,23 @@ class Control(UerpControl):
         )
 
     async def startup(self):
-        await self.registerModel(Blog, version=1, cacheExpire=2, searchExpire=10)
-        await self.registerModel(Message, version=1, cacheExpire=2, searchExpire=10)
-
+        
+        await self.registerModel(
+            Blog,
+            version=1,
+            cacheOptions={
+                'expire': 2
+            }, searchOptions={
+                'expire': 10
+            })
+        
+        await self.registerModel(
+            Message,
+            version=1,
+            cacheOptions={
+                'expire': 2
+            }, searchOptions={
+                'expire': 10
+            })
+        
     async def shutdown(self): pass

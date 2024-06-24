@@ -16,7 +16,7 @@ from .controls import Control
 #===============================================================================
 config = getConfig('../module.conf')
 Logger.register(config)
-api = FastAPI(title=config['default']['title'])
+api = FastAPI(title=config['default']['title'], separate_input_output_schemas=False)
 ctrl = Control(api, config)
 
 #===============================================================================
