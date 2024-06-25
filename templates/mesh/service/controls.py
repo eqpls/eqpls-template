@@ -7,22 +7,25 @@ Equal Plus
 #===============================================================================
 # Import
 #===============================================================================
-from common import BaseControl
+from common import MeshControl
+
+from schema.sample.model import Blog, Message
 
 
 #===============================================================================
 # Implement
 #===============================================================================
-class Control(BaseControl):
+class Control(MeshControl):
 
     def __init__(self, api, config):
-        BaseControl.__init__(self, api, config)
+        MeshControl.__init__(self, api, config)
 
     async def startup(self):
-        self.messageMap = {}
+        await self.registerModel(Blog)
+        await self.registerModel(Message)
 
     async def shutdown(self): pass
-    
+
     #===========================================================================
     # Interface
     #===========================================================================

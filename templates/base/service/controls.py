@@ -7,29 +7,22 @@ Equal Plus
 #===============================================================================
 # Import
 #===============================================================================
-from common import UerpControl
-from driver import Redis, ElasticSearch, PostgreSql
-
-from schema.sample.model import Blog, Message
+from common import BaseControl
 
 
 #===============================================================================
 # Implement
 #===============================================================================
-class Control(UerpControl):
+class Control(BaseControl):
 
     def __init__(self, api, config):
-        UerpControl.__init__(
-            self,
-            api,
-            config,
-            cacheDriver=Redis,
-            searchDriver=ElasticSearch,
-            databaseDriver=PostgreSql
-        )
+        BaseControl.__init__(self, api, config)
 
     async def startup(self):
-        await self.registerModel(Blog)
-        await self.registerModel(Message)
+        self.messageMap = {}
 
     async def shutdown(self): pass
+
+    #===========================================================================
+    # Interface
+    #===========================================================================
