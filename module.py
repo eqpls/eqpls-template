@@ -10,7 +10,6 @@ Equal Plus
 import os
 import time
 import json
-import shutil
 import docker
 import argparse
 import configparser
@@ -55,7 +54,7 @@ def deploy(nowait=False):
     volumes = [f'{path}:/opt/module']
     if environment: volumes.append(f'{environment}:/opt/{environmentName}')
     if schema: volumes.append(f'{schema}:/opt/{schemaName}')
-    
+
     container = client.containers.run(
         f'{tenant}/{title}:{version}',
         detach=True,
@@ -75,7 +74,7 @@ def deploy(nowait=False):
             'retries': 12
         }
     )
-    
+
     while not nowait:
         time.sleep(1)
         container.reload()
@@ -112,8 +111,6 @@ def stop():
 # clean
 def clean():
     for container in client.containers.list(all=True, filters={'name': title}): container.remove(v=True, force=True)
-    shutil.rmtree(f'{path}/conf.d', ignore_errors=True)
-    shutil.rmtree(f'{path}/data.d', ignore_errors=True)
 
 
 # purge
@@ -123,8 +120,6 @@ def purge():
     except: pass
     try: client.images.remove(image=f'{tenant}/{title}:{version}', force=True)
     except: pass
-    shutil.rmtree(f'{path}/conf.d', ignore_errors=True)
-    shutil.rmtree(f'{path}/data.d', ignore_errors=True)
 
 
 # monitor
