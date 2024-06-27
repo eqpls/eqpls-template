@@ -21,7 +21,7 @@ import configparser
 # load configs
 path = os.path.dirname(os.path.realpath(__file__))
 config = configparser.ConfigParser()
-config.read(f'{path}/module.conf', encoding='utf-8')
+config.read(f'{path}/module.ini', encoding='utf-8')
 client = docker.from_env()
 
 # default configs
@@ -34,6 +34,14 @@ port = config['default']['port']
 system_access_key = config['default']['system_access_key']
 system_secret_key = config['default']['system_secret_key']
 
+environment = config['service']['environment']
+environment = os.path.abspath(environment) if environment else None
+environmentName = os.path.basename(environment) if environment else None
+
+schema = config['service']['schema']
+schema = os.path.abspath(config['service']['schema']) if schema else None
+schemaName = os.path.basename(schema) if schema else None
+
 
 #===============================================================================
 # Container Control
@@ -44,18 +52,10 @@ def build(): client.images.build(nocache=True, rm=True, path=f'{path}', tag=f'{t
 
 # deploy
 def deploy(nowait=False):
-    try: os.mkdir(f'{path}/conf.d')
-    except: pass
-    try: os.mkdir(f'{path}/data.d')
-    except: pass
-    try: os.mkdir(f'{path}/back.d')
-    except: pass
-
-    with open(f'{path}/conf.d/{title}.conf', 'w') as fd:
-        fd.write('''
-# Configuration Here
-        ''')
-
+    volumes = [f'{path}:/opt/module']
+    if environment: volumes.append(f'{environment}:/opt/{environmentName}')
+    if schema: volumes.append(f'{schema}:/opt/{schemaName}')
+    
     container = client.containers.run(
         f'{tenant}/{title}:{version}',
         detach=True,
@@ -66,13 +66,8 @@ def deploy(nowait=False):
         ports={
             f'{port}/tcp': (host, int(port))
         },
-        environment=[
-        ],
-        volumes=[
-            f'{path}/conf.d:/conf.d',
-            f'{path}/data.d:/data.d',
-            f'{path}/data.d:/back.d'
-        ],
+        environment=[],
+        volumes=volumes,
         healthcheck={
             'test': 'echo "OK"',
             'interval': 5 * 1000000000,

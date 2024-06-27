@@ -13,12 +13,12 @@ from common import getConfig, Logger, MultiTask, AsyncRest
 from .controls import Control
 from common import ID, ModelStatus
 
-from schema.sample.model import Message
+from schema.sample.model import Blog, Message
 
 #===============================================================================
 # SingleTone
 #===============================================================================
-config = getConfig('../module.conf')
+config = getConfig('../module.ini')
 Logger.register(config)
 api = FastAPI(title=config['default']['title'], separate_input_output_schemas=False)
 ctrl = Control(api, config)
@@ -26,3 +26,6 @@ ctrl = Control(api, config)
 #===============================================================================
 # API Interfaces
 #===============================================================================
+@api.get('/blog')
+async def blog():
+    return await Blog.searchModels()

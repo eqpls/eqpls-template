@@ -21,8 +21,8 @@ class Control(MeshControl):
         MeshControl.__init__(self, api, config)
 
     async def startup(self):
-        await self.registerModel(Blog)
-        await self.registerModel(Message)
+        await self.registerModel(Blog, 'uerp')
+        await self.registerModel(Message, 'uerp')
 
     async def shutdown(self): pass
 

@@ -12,21 +12,21 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, Background
 from common import getConfig, Logger, MultiTask, AsyncRest
 from .controls import Control
 from common import ID, ModelStatus
-from schema.sample.model import Message
+
+from schema.sample.model import Blog, Message
 
 #===============================================================================
 # SingleTone
 #===============================================================================
-config = getConfig('../module.conf')
+config = getConfig('../module.ini')
 Logger.register(config)
 api = FastAPI(title=config['default']['title'], separate_input_output_schemas=False)
 ctrl = Control(api, config)
 
+
 #===============================================================================
 # API Interfaces
 #===============================================================================
-
-
 @api.get('/message', tags=['Message'])
 async def get_message(request:Request) -> list[Message]:
     query = request.query_params._dict
@@ -63,7 +63,7 @@ async def run_multitask() -> List[Any]:
 
 async def backgroundTask(text):
     LOG.INFO(text)
-    
+
 
 @api.get('/background', tags=['Task'])
 async def run_background(

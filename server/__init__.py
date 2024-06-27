@@ -16,16 +16,16 @@ import configparser
 # Implement
 #===============================================================================
 def run():
-    os.chdir(os.path.dirname(os.path.realpath(__file__)))
     config = configparser.ConfigParser()
-    config.read('../module.conf', encoding='utf-8')
-    stage = config['service']['stage']
-    environment = config['service']['environment']
+    config.read('module.ini', encoding='utf-8')
+    environment = os.path.abspath(config['service']['environment'])
     environment = [environment] if environment else []
-    schema = config['service']['schema']
+    schema = os.path.abspath(config['service']['schema'])
     schema = [schema] if schema else []
     paths = config['service']['paths']
-    paths = environment + schema + [path.strip() for path in filter(None, paths.split(','))]
+    paths = environment + schema + [os.path.abspath(path.strip()) for path in filter(None, paths.split(','))]
+    stage = config['service']['stage']
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
     for path in paths: sys.path.append(path)
     paths.append('.')
     uvicorn.run(
