@@ -7,11 +7,13 @@ Equal Plus
 #===============================================================================
 # Import
 #===============================================================================
+from stringcase import snakecase
 from typing import Annotated, Literal, List, Any
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, BackgroundTasks, Query
-from common import getConfig, Logger, MultiTask, AsyncRest
+
+from common import getConfig, Logger, MultiTask, AsyncRest, ID, ModelStatus
+
 from .controls import Control
-from common import ID, ModelStatus
 
 from schema.sample.model import Blog, Message
 
@@ -20,7 +22,13 @@ from schema.sample.model import Blog, Message
 #===============================================================================
 config = getConfig('../module.ini')
 Logger.register(config)
-api = FastAPI(title=config['default']['title'], separate_input_output_schemas=False)
+rootPath = f"/{snakecase(config['default']['title'])}"
+api = FastAPI(
+    title=config['default']['title'],
+    separate_input_output_schemas=False,
+    docs_url=f'{rootPath}/docs',
+    openapi_url=f'{rootPath}/openapi.json'
+)
 ctrl = Control(api, config)
 
 

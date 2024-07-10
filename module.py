@@ -27,9 +27,14 @@ client = docker.from_env()
 title = config['default']['title']
 tenant = config['default']['tenant']
 version = config['default']['version']
+
+memory = config['default']['memory']
+
 hostname = config['default']['hostname']
 host = config['default']['host']
 port = config['default']['port']
+export = True if config['default']['export'].lower() == 'true' else False
+
 system_access_key = config['default']['system_access_key']
 system_secret_key = config['default']['system_secret_key']
 
@@ -55,6 +60,10 @@ def build(): client.images.build(nocache=True, rm=True, path=f'{path}', tag=f'{t
 
 # deploy
 def deploy(nowait=False):
+    ports = {
+        f'{port}/tcp': (host, int(port))
+    } if export else {}
+
     volumes = [f'{path}:/opt/module']
     if environment: volumes.append(f'{environment}:/opt/{environmentName}')
     if schema: volumes.append(f'{schema}:/opt/{schemaName}')
@@ -62,13 +71,11 @@ def deploy(nowait=False):
     container = client.containers.run(
         f'{tenant}/{title}:{version}',
         detach=True,
-        name=title,
+        name=f'{tenant}-{title}',
         hostname=hostname,
         network=tenant,
-        mem_limit='1g',
-        ports={
-            f'{port}/tcp': (host, int(port))
-        },
+        mem_limit=memory,
+        ports=ports,
         environment=[],
         volumes=volumes,
         healthcheck={
