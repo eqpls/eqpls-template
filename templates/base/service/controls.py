@@ -21,8 +21,6 @@ class Control(BaseControl):
     async def startup(self):
         self.messageMap = {}
 
-    async def shutdown(self): pass
-
     #===========================================================================
     # Interface
     #===========================================================================

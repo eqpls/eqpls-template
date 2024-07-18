@@ -42,6 +42,8 @@ health_check_interval = int(config['default']['health_check_interval'])
 health_check_timeout = int(config['default']['health_check_timeout'])
 health_check_retries = int(config['default']['health_check_retries'])
 
+container_links = config._sections['container:links']
+
 environment = config['service']['environment']
 environment = os.path.abspath(environment) if environment else None
 environmentName = os.path.basename(environment) if environment else None
@@ -75,6 +77,7 @@ def deploy(nowait=False):
         hostname=hostname,
         network=tenant,
         mem_limit=memory,
+        links=container_links,
         ports=ports,
         environment=[],
         volumes=volumes,

@@ -32,8 +32,8 @@ def run():
         'service.routes:api',
         host=config['default']['host'],
         port=int(config['default']['port']),
+        loop='uvloop' if 'container' in config['service']['runtime'] else 'auto',
         workers=int(config['service']['workers']) if 'dev' not in stage else None,
-        loop='uvloop' if 'container' in stage else 'auto',
         reload=True if 'dev' in stage else False,
         reload_dirs=paths if 'dev' in stage else None,
         log_level='debug' if 'dev' in stage else 'info'
